@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 final ButtonStyle untukKonsultasiButton = ElevatedButton.styleFrom(
-  alignment: Alignment.centerRight,
   onPrimary: Colors.white,
   primary: Colors.teal.shade900,
   elevation: 2,

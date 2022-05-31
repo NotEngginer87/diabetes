@@ -350,22 +350,6 @@ class _KuesionerState extends State<Kuesioner> {
                             );
                           },
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                            left: 24,
-                            right: 24,
-                          ),
-                          child: ElevatedButton(
-                            style: untukKonsultasiButton,
-                            child: const Text('submit'),
-                            onPressed: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (BuildContext context) {
-                                return const HalamanRumah();
-                              }));
-                            },
-                          ),
-                        ),
                         const SizedBox(
                           height: 36,
                         ),
