@@ -105,8 +105,8 @@ class _infopasienState extends State<infopasien> {
                   ),
                   ElevatedButton(onPressed: (){
                     Navigator.push(context, MaterialPageRoute(builder: (contet) => InfoAkunDiabetes()));
-                  }, child: Text('Data'),
-                  style: ElevatedButton.styleFrom(primary: Colors.white,onPrimary: IsiQueColors.isiqueblue.shade400)),
+                  },
+                  style: ElevatedButton.styleFrom(primary: Colors.white,onPrimary: IsiQueColors.isiqueblue.shade400), child: Text('Data')),
                 ],
               )
             );

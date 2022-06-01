@@ -39,7 +39,7 @@ class _InfoAkunDiabetesState extends State<InfoAkunDiabetes> {
           child:Column(
             children: [
               Padding(
-                  padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
+                  padding: const EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
                   child: Card(
                       elevation: 4,
                       clipBehavior: Clip.antiAlias,
@@ -47,12 +47,12 @@ class _InfoAkunDiabetesState extends State<InfoAkunDiabetes> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.all(12),
+                        padding: const EdgeInsets.all(12),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
 
-                            SizedBox(
+                            const SizedBox(
                               height: 8,
                             ),
                             StreamBuilder<DocumentSnapshot>(
@@ -79,15 +79,15 @@ class _InfoAkunDiabetesState extends State<InfoAkunDiabetes> {
                                         bool polifagi = data['polifagi'];
                                         String textpoliuri, textpolidipsi, textpolifagi;
                                         textpoliuri = (poliuri == true) ?  'ya' :  'tidak';
-                                        textpolidipsi = (poliuri == true) ?  'ya' :  'tidak';
-                                        textpolifagi = (poliuri == true) ?  'ya' :  'tidak';
+                                        textpolidipsi = (polidipsi == true) ?  'ya' :  'tidak';
+                                        textpolifagi = (polifagi == true) ?  'ya' :  'tidak';
 
                                         return Column(
                                           crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
 
                                             Padding(
-                                              padding: EdgeInsets.only(left: 4, right: 4),
+                                              padding: const EdgeInsets.only(left: 4, right: 4),
                                               child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
@@ -105,7 +105,7 @@ class _InfoAkunDiabetesState extends State<InfoAkunDiabetes> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: EdgeInsets.only(left: 4, right: 4),
+                                              padding: const EdgeInsets.only(left: 4, right: 4),
                                               child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
@@ -123,7 +123,7 @@ class _InfoAkunDiabetesState extends State<InfoAkunDiabetes> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: EdgeInsets.only(left: 4, right: 4),
+                                              padding: const EdgeInsets.only(left: 4, right: 4),
                                               child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
@@ -142,7 +142,7 @@ class _InfoAkunDiabetesState extends State<InfoAkunDiabetes> {
                                             ),
 
                                             Padding(
-                                              padding: EdgeInsets.only(left: 4, right: 4),
+                                              padding: const EdgeInsets.only(left: 4, right: 4),
                                               child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
@@ -160,7 +160,7 @@ class _InfoAkunDiabetesState extends State<InfoAkunDiabetes> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: EdgeInsets.only(left: 4, right: 4),
+                                              padding: const EdgeInsets.only(left: 4, right: 4),
                                               child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
@@ -178,7 +178,7 @@ class _InfoAkunDiabetesState extends State<InfoAkunDiabetes> {
                                               ),
                                             ),
                                             Padding(
-                                              padding: EdgeInsets.only(left: 4, right: 4),
+                                              padding: const EdgeInsets.only(left: 4, right: 4),
                                               child: Row(
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
@@ -210,7 +210,7 @@ class _InfoAkunDiabetesState extends State<InfoAkunDiabetes> {
                                 );
                               },
                             ),
-                            SizedBox(
+                            const SizedBox(
                               height: 16,
                             ),
                           ],
