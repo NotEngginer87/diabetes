@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../api/ColorsApi.dart';
 import 'lihatprofil.dart';
 
 class infopasien extends StatefulWidget {
@@ -26,7 +27,7 @@ class _infopasienState extends State<infopasien> {
 
     return Container(
       decoration: BoxDecoration(
-        color: Colors.teal.shade900,
+        color: IsiQueColors.isiqueblue.shade400,
       ),
       width: MediaQuery.of(context).size.width,
       height: 80,
@@ -54,7 +55,7 @@ class _infopasienState extends State<infopasien> {
                       children: [
                         Text(
                           'hello',
-                          style: TextStyle(color: Colors.teal.shade900),
+                          style: TextStyle(color: IsiQueColors.isiqueblue.shade400,),
                         ),
                         SizedBox(
                           height: 4,
@@ -64,7 +65,7 @@ class _infopasienState extends State<infopasien> {
                           style: GoogleFonts.pathwayGothicOne(
                               fontWeight: FontWeight.w500,
                               fontSize: 20,
-                              color: Colors.teal.shade900),
+                              color: IsiQueColors.isiqueblue.shade400,),
                         ),
                       ],
                     ),

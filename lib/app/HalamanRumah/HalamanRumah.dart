@@ -9,10 +9,11 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_nav_bar/google_nav_bar.dart';
 import 'package:line_icons/line_icons.dart';
 
+import '../../Algorithm/countdate.dart';
 import '../blog/BlogDepan.dart';
-import '../home/anamnesiscard.dart';
 import '../home/dsmqcard.dart';
 import '../home/infopasien.dart';
+import '../home/statusdiabetescard.dart';
 import '../lihatprofil.dart';
 import '../tab3/FAQ.dart';
 import '../tab3/kontak.dart';
@@ -35,7 +36,7 @@ class _HalamanRumahState extends State<HalamanRumah> {
 
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
-    final emaila = user!.email;
+    final useremail = user!.email;
     final ButtonStyle Buttonstyle = ElevatedButton.styleFrom(
       onPrimary: Colors.black,
       primary: Colors.white,
@@ -53,9 +54,7 @@ class _HalamanRumahState extends State<HalamanRumah> {
         title: const Text('DIABETO'),
         centerTitle: true,
         titleTextStyle: GoogleFonts.pathwayGothicOne(
-            fontWeight: FontWeight.w500,
-            fontSize: 24,
-            color: Colors.white),
+            fontWeight: FontWeight.w500, fontSize: 24, color: Colors.white),
         backgroundColor: IsiQueColors.isiqueblue.shade400,
         elevation: 0,
         automaticallyImplyLeading: true,
@@ -63,11 +62,11 @@ class _HalamanRumahState extends State<HalamanRumah> {
           Padding(
             padding: const EdgeInsets.only(right: 12),
             child: StreamBuilder<DocumentSnapshot>(
-              stream: userdata.doc(emaila.toString()).snapshots(),
+              stream: userdata.doc(useremail.toString()).snapshots(),
               builder: (context, AsyncSnapshot snapshot) {
                 if (snapshot.hasData) {
                   Map<String, dynamic> data =
-                  snapshot.data!.data() as Map<String, dynamic>;
+                      snapshot.data!.data() as Map<String, dynamic>;
 
                   String? imageUrl = data['imageurl'];
 
@@ -83,24 +82,24 @@ class _HalamanRumahState extends State<HalamanRumah> {
                           child: Container(
                             child: (imageUrl == null)
                                 ? const Image(
-                              image: NetworkImage(
-                                  'https://firebasestorage.googleapis.com/v0/b/teledentistry-70122.appspot.com/o/foto_blog%2Fkosong.png?alt=media&token=652482ea-7fa4-451f-913a-912c83d3ebd1'),
-                              height: 36,
-                              width: 36,
-                              fit: BoxFit.cover,
-                            )
+                                    image: NetworkImage(
+                                        'https://firebasestorage.googleapis.com/v0/b/teledentistry-70122.appspot.com/o/foto_blog%2Fkosong.png?alt=media&token=652482ea-7fa4-451f-913a-912c83d3ebd1'),
+                                    height: 36,
+                                    width: 36,
+                                    fit: BoxFit.cover,
+                                  )
                                 : Image(
-                              image: NetworkImage(imageUrl),
-                              height: 36,
-                              width: 36,
-                              fit: BoxFit.cover,
-                            ),
+                                    image: NetworkImage(imageUrl),
+                                    height: 36,
+                                    width: 36,
+                                    fit: BoxFit.cover,
+                                  ),
                           )),
                       onTap: () {
                         Navigator.push(context,
                             MaterialPageRoute(builder: (context) {
-                              return const LihatProfil();
-                            }));
+                          return const LihatProfil();
+                        }));
                       },
                     ),
                   );
@@ -131,10 +130,38 @@ class _HalamanRumahState extends State<HalamanRumah> {
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height,
                           child: Column(
-                            children: const [
-                              infopasien(),
-                              AnamnesisCard(),
-                              DSMQCard(),
+                            children: [
+                              const infopasien(),
+                              const SDCard(),
+                              StreamBuilder<DocumentSnapshot>(
+                                stream: userdata.doc(useremail).snapshots(),
+                                builder: (context, AsyncSnapshot snapshot) {
+                                  if (snapshot.hasData) {
+                                    Map<String, dynamic> data = snapshot.data!
+                                        .data() as Map<String, dynamic>;
+
+                                    int? DSMQtanggal = data['DSMQtanggal'];
+                                    int? DSMQbulan = data['DSMQbulan'];
+                                    int? DSMQtahun = data['DSMQtahun'];
+                                    num hitung2bulan = getdate(
+                                        DateTime.now().year,
+                                        DateTime.now().month,
+                                        DateTime.now().day,
+                                        DSMQtahun,
+                                        DSMQbulan,
+                                        DSMQtanggal);
+
+                                    if (hitung2bulan > 60) {
+                                      return const DSMQCard();
+                                    } else {
+                                      return Container();
+                                    }
+                                  }
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                },
+                              ),
                             ],
                           ),
                         ),
@@ -228,8 +255,8 @@ class _HalamanRumahState extends State<HalamanRumah> {
                                                         return const kontak();
                                                       });
                                                 },
-                                                child:
-                                                    const Text('kontak Diabeto')),
+                                                child: const Text(
+                                                    'kontak Diabeto')),
                                           ),
                                           const SizedBox(
                                             height: 12,

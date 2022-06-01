@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../api/ColorsApi.dart';
+
 final ButtonStyle untukKonsultasiButton = ElevatedButton.styleFrom(
   onPrimary: Colors.white,
-  primary: Colors.teal.shade900,
+  primary: IsiQueColors.isiqueblue.shade400,
   elevation: 2,
   padding: const EdgeInsets.symmetric(horizontal: 16),
   shape: const RoundedRectangleBorder(
@@ -21,7 +23,7 @@ final ButtonStyle untukKonsultasiButtongrey = ElevatedButton.styleFrom(
 );
 
 final ButtonStyle untukKonsultasiButtonwhite = ElevatedButton.styleFrom(
-  onPrimary: Colors.teal.shade900,
+  onPrimary: IsiQueColors.isiqueblue.shade400,
   primary: Colors.white,
   elevation: 2,
   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -32,7 +34,7 @@ final ButtonStyle untukKonsultasiButtonwhite = ElevatedButton.styleFrom(
 
 final ButtonStyle untukKonsultasiButtonmax = ElevatedButton.styleFrom(
   onPrimary: Colors.white,
-  primary: Colors.teal.shade900,
+  primary: IsiQueColors.isiqueblue.shade400,
 
   elevation: 2,
   padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -43,7 +45,7 @@ final ButtonStyle untukKonsultasiButtonmax = ElevatedButton.styleFrom(
 
 final ButtonStyle untukKonsultasiButtonlebar = ElevatedButton.styleFrom(
   onPrimary: Colors.white,
-  primary: Colors.teal.shade900,
+  primary: IsiQueColors.isiqueblue.shade400,
   elevation: 2,
   padding: const EdgeInsets.symmetric(horizontal: 16),
   shape: const RoundedRectangleBorder(
@@ -51,4 +53,22 @@ final ButtonStyle untukKonsultasiButtonlebar = ElevatedButton.styleFrom(
   ),
 );
 
+final ButtonStyle untukKonsultasiButtonBlueDiabeto = ElevatedButton.styleFrom(
+  onPrimary: IsiQueColors.isiqueblue.shade400,
+  primary: Colors.white,
+  elevation: 2,
+  padding: const EdgeInsets.symmetric(horizontal: 16),
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+  ),
+);
 
+final ButtonStyle untukKonsultasiButtonBlueDiabetoinverted = ElevatedButton.styleFrom(
+  onPrimary: Colors.white,
+  primary: IsiQueColors.isiqueblue.shade400,
+  elevation: 2,
+  padding: const EdgeInsets.symmetric(horizontal: 16),
+  shape: const RoundedRectangleBorder(
+    borderRadius: BorderRadius.all(Radius.circular(8)),
+  ),
+);

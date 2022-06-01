@@ -1,10 +1,11 @@
+// ignore_for_file: non_constant_identifier_names
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diabetes/api/DatabaseServices.dart';
 import 'package:diabetes/app/Utils/style.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 import '../../api/ColorsApi.dart';
 import 'kuesioner.dart';
@@ -23,20 +24,9 @@ class _DSMQCardState extends State<DSMQCard> {
     final User? user = auth.currentUser;
     final useremail = user?.email;
 
-    final ButtonStyle Buttonstyle = ElevatedButton.styleFrom(
-      onPrimary: Colors.white,
-      primary: IsiQueColors.isiqueblue.shade400,
-      elevation: 0,
-      textStyle: const TextStyle(fontWeight: FontWeight.w900),
-      minimumSize: const Size(96, 48),
-      padding: const EdgeInsets.symmetric(horizontal: 8),
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(8)),
-      ),
-    );
-
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    CollectionReference kuesioner = firestore.collection('kuesioner');
+    CollectionReference userdata = firestore.collection('user');
+
     return Card(
         clipBehavior: Clip.antiAlias,
         color: IsiQueColors.isiqueblue.shade400,
@@ -55,46 +45,72 @@ class _DSMQCardState extends State<DSMQCard> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        'Isi Data Status DSMQ Pertamamu !!!',
-                        style: TextStyle(fontSize: 18, color: Colors.white),
-                        textAlign: TextAlign.left,
-                      ),
-                      const SizedBox(
-                        height: 12,
+                      StreamBuilder<DocumentSnapshot>(
+                        stream: userdata.doc(useremail).snapshots(),
+                        builder: (context, AsyncSnapshot snapshot) {
+                          if (snapshot.hasData) {
+                            Map<String, dynamic> data =
+                                snapshot.data!.data() as Map<String, dynamic>;
+
+                            String? statusDSMQ = data['statusDSMQ'];
+
+                            if (statusDSMQ == null) {
+                              return const Text(
+                                'Isi Data Status DSMQ Pertamamu !!!',
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.white),
+                                textAlign: TextAlign.left,
+                              );
+                            } else {
+                              return const Text(
+                                'Sudah 2 bulan tidak mengisi DSMQ, ayo isi status DSMQ mu !',
+                                style: TextStyle(
+                                    fontSize: 18, color: Colors.white),
+                                textAlign: TextAlign.left,
+                              );
+                            }
+                          }
+                          return const Center(
+                            child: CircularProgressIndicator(),
+                          );
+                        },
                       ),
                       const SizedBox(
                         height: 12,
                       ),
                       Row(
                         crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
                           StreamBuilder<DocumentSnapshot>(
-                            stream: kuesioner.doc('kuesionerEUCS').snapshots(),
+                            stream: userdata.doc(useremail).snapshots(),
                             builder: (context, AsyncSnapshot snapshot) {
                               if (snapshot.hasData) {
                                 Map<String, dynamic> data = snapshot.data!
                                     .data() as Map<String, dynamic>;
 
-                                int orangke = data['orang'];
+                                int dsmqcek = data['DSMQcek'];
 
                                 return ElevatedButton(
-                                  style: untukKonsultasiButton,
+                                  style: untukKonsultasiButtonBlueDiabeto,
                                   child: const Text('Jawab Survey DSMQ'),
                                   onPressed: () {
                                     Navigator.push(context, MaterialPageRoute(
                                         builder: (BuildContext context) {
-                                      return Kuesioner(orangke);
+                                      return Kuesioner(dsmqcek);
                                     }));
-                                    DatabaseServices.updatekuesioner(orangke);
-                                    DatabaseServices.updatejmlorangkuesioner();
+                                    DatabaseServices.updatekuesioner(
+                                        useremail!, dsmqcek);
+                                    DatabaseServices.updatejmlorangkuesioner(
+                                        useremail);
                                     DatabaseServices.updatewaktukuesioner(
-                                        orangke,
+                                        useremail,
+                                        dsmqcek,
                                         DateTime.now().day,
                                         DateTime.now().month,
                                         DateTime.now().year);
                                     DatabaseServices.uploadfaktorresikosetfalse(
-                                        useremail!);
+                                        useremail);
                                   },
                                 );
                               }
@@ -108,39 +124,5 @@ class _DSMQCardState extends State<DSMQCard> {
                     ],
                   ),
                 ))));
-  }
-}
-
-class SurveyDSMQ extends StatefulWidget {
-  const SurveyDSMQ({Key? key}) : super(key: key);
-
-  @override
-  State<SurveyDSMQ> createState() => _SurveyDSMQState();
-}
-
-class _SurveyDSMQState extends State<SurveyDSMQ> {
-  @override
-  Widget build(BuildContext context) {
-    FirebaseFirestore firestore = FirebaseFirestore.instance;
-    CollectionReference userdata = firestore.collection('user');
-
-    final FirebaseAuth auth = FirebaseAuth.instance;
-    final User? user = auth.currentUser;
-    final emaila = user!.email;
-
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('DIABETO'),
-        centerTitle: true,
-        titleTextStyle: GoogleFonts.pathwayGothicOne(
-            fontWeight: FontWeight.w500, fontSize: 24, color: Colors.white),
-        backgroundColor: IsiQueColors.isiqueblue.shade400,
-        elevation: 0,
-      ),
-      body: Padding(
-        padding: EdgeInsets.all(12),
-        child: Container(),
-      ),
-    );
   }
 }

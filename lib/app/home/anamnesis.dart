@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:diabetes/api/DatabaseServices.dart';
+import 'package:diabetes/app/HalamanRumah/HalamanRumah.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 
@@ -14,6 +15,8 @@ import 'package:permission_handler/permission_handler.dart';
 
 import 'package:path/path.dart';
 
+import '../../api/ColorsApi.dart';
+
 class Anamnesis extends StatefulWidget {
   const Anamnesis({Key? key}) : super(key: key);
 
@@ -21,7 +24,7 @@ class Anamnesis extends StatefulWidget {
   State<Anamnesis> createState() => _AnamnesisState();
 }
 
-class _AnamnesisState extends State<Anamnesis>  {
+class _AnamnesisState extends State<Anamnesis> {
   int currentstep = 0;
 
   TextEditingController nama = TextEditingController();
@@ -34,15 +37,6 @@ class _AnamnesisState extends State<Anamnesis>  {
   TextEditingController tinggibadan = TextEditingController();
   TextEditingController keluhan = TextEditingController();
   TextEditingController jeniskelamin = TextEditingController();
-
-  late bool switchnama = false;
-  late bool switchgender = false;
-  late bool switchumur = false;
-  late bool switchnotelepon = false;
-  late bool switchalamat = false;
-
-  late bool switchagama = false;
-  late bool switchpekerjaan = false;
 
   late bool switchcekglukosa = false;
   late bool switchtinggibadan = false;
@@ -60,11 +54,11 @@ class _AnamnesisState extends State<Anamnesis>  {
   int? umur;
   int? tanggalawal = 0, bulanawal = 0, tahunawal = 0;
 
-  bool? switchimpor;
-
   String? _valuecekglukosa = 'pilih';
 
-  bool isLastStep2 = false;
+  bool isLastStep3 = false;
+
+  late int tanggalcek, bulancek, tahuncek;
 
   Widget buildUploadStatus(UploadTask task) => StreamBuilder<TaskSnapshot>(
         stream: task.snapshotEvents,
@@ -91,17 +85,14 @@ class _AnamnesisState extends State<Anamnesis>  {
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
-    CollectionReference listpasiencount =
-        firestore.collection('listpasiencount');
     CollectionReference faktorresiko =
         firestore.collection('faktorresikodiabetes');
 
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
-    final emaila = user!.email;
+    final useremail = user!.email;
 
     List<Step> getSteps() => [
-
           Step(
               state: currentstep > 0 ? StepState.complete : StepState.indexed,
               isActive: currentstep >= 0,
@@ -200,6 +191,9 @@ class _AnamnesisState extends State<Anamnesis>  {
                                 tanggal = date.day.toString();
                                 bulan = date.month.toString();
                                 tahun = date.year.toString();
+                                tanggalcek = date.day;
+                                bulancek = date.month;
+                                tahuncek = date.year;
                                 return true;
                               },
                               onChanged: (val) => print(val),
@@ -225,7 +219,7 @@ class _AnamnesisState extends State<Anamnesis>  {
           Step(
             state: currentstep > 1 ? StepState.complete : StepState.indexed,
             isActive: currentstep >= 1,
-            title: const Text('Keluhan'),
+            title: const Text('Faktor Resiko'),
             content: Column(
               children: <Widget>[
                 const Text(
@@ -239,7 +233,7 @@ class _AnamnesisState extends State<Anamnesis>  {
                       return Column(
                           children: snapshot.data.docs
                               .map<Widget>((e) => CheckBoxFaktorResiko(
-                            emaila!,
+                                    useremail!,
                                     e.data()['id'],
                                     e.data()['resiko'],
                                   ))
@@ -268,39 +262,20 @@ class _AnamnesisState extends State<Anamnesis>  {
         title: const Text('Anamnesis'),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.teal.shade900,
+        backgroundColor: IsiQueColors.isiqueblue.shade400,
       ),
       body: Theme(
         data: ThemeData(
-            colorScheme: ColorScheme.fromSwatch()
-                .copyWith(primary: Colors.teal.shade900)),
+            colorScheme: ColorScheme.fromSwatch().copyWith(
+          primary: IsiQueColors.isiqueblue.shade400,
+        )),
         child: Stepper(
             type: StepperType.vertical,
             currentStep: currentstep,
             steps: getSteps(),
             onStepContinue: () {
               setState(() {
-                if (currentstep == 0) {
-                  if (switchberatbadan == true) {
-                    if (switchtinggibadan == true) {
-                      if (switchcekglukosa == true) {
-                        setState(() {
-                          currentstep = 1;
-                        });
-                      }
-                    }
-                  }
-                }
-                if (currentstep == 1) {
-                  if (switchkeluhan == true) {
-                    if (switchfoto == true) {
-                      setState(() {
-                        isLastStep2 = true;
-                        isLastStep2 = true;
-                      });
-                    }
-                  }
-                }
+                currentstep += 1;
               });
             },
             onStepTapped: (step) => setState(() {
@@ -314,35 +289,11 @@ class _AnamnesisState extends State<Anamnesis>  {
                     });
                   },
             controlsBuilder: (context, details) {
+              final isLastStep = currentstep == getSteps().length - 1;
               return Container(
-                margin: const EdgeInsets.only(top: 12),
+                margin: const EdgeInsets.only(top: 50),
                 child: Row(
                   children: [
-                    ((isLastStep2 == true) && (currentstep == 2))
-                        ? Expanded(
-                            child: StreamBuilder<DocumentSnapshot>(
-                            stream: listpasiencount.doc('count').snapshots(),
-                            builder: (context, AsyncSnapshot snapshot) {
-                              if (snapshot.hasData) {
-                                return ElevatedButton(
-                                  onPressed: () {},
-                                  child: const Text('Konfirmasi'),
-                                );
-                              }
-                              return const Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            },
-                          ))
-                        : Expanded(
-                            child: ElevatedButton(
-                              onPressed: details.onStepContinue,
-                              child: const Text('lanjut'),
-                            ),
-                          ),
-                    const SizedBox(
-                      width: 20,
-                    ),
                     if (currentstep != 0)
                       Expanded(
                         child: ElevatedButton(
@@ -350,6 +301,37 @@ class _AnamnesisState extends State<Anamnesis>  {
                           child: const Text('balik'),
                         ),
                       ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    (isLastStep == true)
+                        ? Expanded(
+                            child: ElevatedButton(
+                              onPressed: () {
+                                DatabaseServices.updateanamnesis(
+                                    useremail!,
+                                    int.tryParse(beratbadan.text)!,
+                                    int.tryParse(tinggibadan.text),
+                                    tanggalcek,
+                                    bulancek,
+                                    tahuncek);
+
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          const HalamanRumah()),
+                                );
+                              },
+                              child: const Text('Konfirmasi'),
+                            ),
+                          )
+                        : Expanded(
+                            child: ElevatedButton(
+                              onPressed: details.onStepContinue,
+                              child: const Text('lanjut'),
+                            ),
+                          ),
                   ],
                 ),
               );
@@ -399,8 +381,6 @@ class _AnamnesisState extends State<Anamnesis>  {
   }
 }
 
-
-
 class CheckBoxFaktorResiko extends StatefulWidget {
   const CheckBoxFaktorResiko(this.useremail, this.id, this.resiko, {Key? key})
       : super(key: key);
@@ -424,7 +404,8 @@ class _CheckBoxFaktorResikoState extends State<CheckBoxFaktorResiko> {
           onChanged: (value) {
             setState(() {
               this.value = value!;
-              DatabaseServices.uploadfaktorresiko(widget.useremail,widget.id,value,widget.resiko);
+              DatabaseServices.uploadfaktorresiko(
+                  widget.useremail, widget.id, value, widget.resiko);
             });
           },
         ),

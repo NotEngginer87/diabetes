@@ -1,4 +1,4 @@
-// ignore_for_file: camel_case_types
+// ignore_for_file: camel_case_types, deprecated_member_use
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -7,6 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:line_icons/line_icons.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:whatsapp_unilink/whatsapp_unilink.dart';
+
+import '../api/ColorsApi.dart';
 
 class puskesmas extends StatefulWidget {
   const puskesmas({Key? key}) : super(key: key);
@@ -47,7 +49,6 @@ class _puskesmasState extends State<puskesmas> {
                     Map<String, dynamic> data =
                     snapshot.data!.data() as Map<String, dynamic>;
 
-                    String id = data['id'];
                     String cp = data['cp'];
                     String image = data['image'];
                     String lokasi = data['lokasi'];
@@ -92,7 +93,7 @@ class _puskesmasState extends State<puskesmas> {
                                       style: GoogleFonts.pathwayGothicOne(
                                         fontWeight: FontWeight.w500,
                                         fontSize: 24,
-                                        color: Colors.teal.shade900,
+                                        color: IsiQueColors.isiqueblue.shade400,
                                       ),
                                     ),
                                     const SizedBox(
@@ -109,7 +110,7 @@ class _puskesmasState extends State<puskesmas> {
                                           style: GoogleFonts.pathwayGothicOne(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 20,
-                                              color: Colors.teal.shade900),
+                                              color: IsiQueColors.isiqueblue.shade400,),
                                         ),
                                       ],
                                     ),
@@ -137,14 +138,14 @@ class _puskesmasState extends State<puskesmas> {
                             style: GoogleFonts.pathwayGothicOne(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 20,
-                                color: Colors.teal.shade900),
+                                color: IsiQueColors.isiqueblue.shade400,),
                           ),
                           Text(
                             prolanis,
                             style: GoogleFonts.pathwayGothicOne(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 20,
-                                color: Colors.teal.shade900),
+                                color: IsiQueColors.isiqueblue.shade400,),
                           ),
                         ],
                       ),

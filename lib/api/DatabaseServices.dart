@@ -8,12 +8,10 @@ class DatabaseServices {
   static CollectionReference userdata = firestore.collection('user');
   static CollectionReference blog = firestore.collection('blog');
   static CollectionReference video = firestore.collection('videopembelajaran');
-  static CollectionReference kuesioner = firestore.collection('kuesioner');
 
   static Future<void> updateakun(
       String? email,
       String nama,
-      String username,
       String gender,
       String? tanggal,
       String? bulan,
@@ -21,11 +19,10 @@ class DatabaseServices {
       String alamat,
       String noHP,
       String? imageUrl) async {
-    await userdata.doc(email).set(
+    await userdata.doc(email).update(
       {
         'email': email,
         'nama': nama,
-        'username': username,
         'gender': gender,
         'tanggal': tanggal,
         'bulan': bulan,
@@ -33,6 +30,33 @@ class DatabaseServices {
         'alamat': alamat,
         'noHP': noHP,
         'imageurl': imageUrl,
+        'DSMQtanggal': DateTime.now().day,
+        'DSMQbulan': DateTime.now().month,
+        'DSMQtahun': DateTime.now().year,
+        'banyakukurstatusdiabetes': 0,
+        'countgdp': 0,
+        'countgds': 0,
+        'countttgo': 0,
+        'statusDSMQ': 'belum ada',
+        'statusDiabetes': 'belum ada',
+        'beratbadan': 0,
+        'tinggibadan': 0,
+        'tanggalcekglukosa': 0,
+        'bulancekglukosa': 0,
+        'tahuncekglukosa': 0,
+      },
+    );
+  }
+
+  static Future<void> updateanamnesis(
+      String email, int berat, tinggi, int tanggal, bulan, tahun) async {
+    await userdata.doc(email).update(
+      {
+        'beratbadan': berat,
+        'tinggibadan': tinggi,
+        'tanggalcekglukosa': tanggal,
+        'bulancekglukosa': bulan,
+        'tahuncekglukosa': tahun,
       },
     );
   }
@@ -163,35 +187,33 @@ class DatabaseServices {
     }
   }
 
-  static Future<void> updatejmlorangkuesioner() async {
-    await kuesioner.doc('kuesionerEUCS').update(
+  static Future<void> updatejmlorangkuesioner(String email) async {
+    await userdata.doc(email).update(
       {
-        'orang': FieldValue.increment(1),
+        'DSMQcek': FieldValue.increment(1),
       },
     );
   }
 
   static Future<void> updatekuesioner(
-    int orangke,
+    String email,
+    int dsmqcek,
   ) async {
-    await kuesioner
-        .doc('kuesionerEUCS')
-        .collection('orang')
-        .doc(orangke.toString())
-        .set(
+    await userdata.doc(email).collection('DSMQ').doc(dsmqcek.toString()).set(
       {
-        'id': orangke.toString(),
+        'id': dsmqcek.toString(),
       },
     );
   }
 
   static Future<void> updateskorkuesioner(
+    String useremail,
     int orangke,
     int tambahskor,
   ) async {
-    await kuesioner
-        .doc('kuesionerEUCS')
-        .collection('orang')
+    await userdata
+        .doc(useremail)
+        .collection('DSMQ')
         .doc(orangke.toString())
         .update(
       {
@@ -201,28 +223,29 @@ class DatabaseServices {
   }
 
   static Future<void> updatewaktukuesioner(
-      int orangke,tanggal,bulan,tahun
-      ) async {
-    await kuesioner
-        .doc('kuesionerEUCS')
-        .collection('orang')
+      String useremail, int orangke, tanggal, bulan, tahun) async {
+    await userdata
+        .doc(useremail)
+        .collection('DSMQ')
         .doc(orangke.toString())
         .update(
       {
         'tanggal': tanggal,
         'bulan': bulan,
         'tahun': tahun,
+        'skor': 0,
       },
     );
   }
 
   static Future<void> updateminskorkuesioner(
-      int orangke,
-      int minskor,
-      ) async {
-    await kuesioner
-        .doc('kuesionerEUCS')
-        .collection('orang')
+    String useremail,
+    int orangke,
+    int minskor,
+  ) async {
+    await userdata
+        .doc(useremail)
+        .collection('DSMQ')
         .doc(orangke.toString())
         .update(
       {
@@ -231,37 +254,94 @@ class DatabaseServices {
     );
   }
 
-  static Future<void> updatejawabankuesioner(
-    int orangke,
-    String idpertanyaan,
-    int nilai,
-  ) async {
-    await kuesioner
-        .doc('kuesionerEUCS')
-        .collection('orang')
-        .doc(orangke.toString())
-        .collection('jawabannomor')
-        .doc(idpertanyaan.toString())
-        .set(
-      {
-        'nilai': nilai,
-      },
-    );
-  }
-
-
   static Future<void> updatestatusDSMQ(
-      String email,
-      String value,
-      ) async {
-    await userdata
-        .doc(email)
-        .update(
+      String email, String value, int tanggal, bulan, tahun) async {
+    await userdata.doc(email).update(
       {
         'statusDSMQ': value,
+        'DSMQtanggal': tanggal,
+        'DSMQbulan': bulan,
+        'DSMQtahun': tahun,
       },
     );
   }
 
+  static Future<void> updatestatusDiabetes(
+    String email,
+    int banyakstatusdiabetes,
+    int gdp,
+    gds,
+    ttgo,
+    bool poliuri,
+    polidipsi,
+    polifagi,
+    String statusdiabetes,
+  ) async {
+    await userdata
+        .doc(email)
+        .collection('Status')
+        .doc(banyakstatusdiabetes.toString())
+        .set(
+      {
+        'gdp': gdp,
+        'gds': gds,
+        'ttgo': ttgo,
+        'poliuri': poliuri,
+        'polidipsi': polidipsi,
+        'polifagi': polifagi,
+        'statusdiabetes': statusdiabetes,
+      },
+    );
+  }
 
+  static Future<void> updatestatusDiabetesbanyakukurstatus(
+    String email,
+  ) async {
+    await userdata.doc(email).update(
+      {
+        'banyakukurstatusdiabetes': FieldValue.increment(1),
+      },
+    );
+  }
+
+  static Future<void> updatestatusDiabetescountgdp(
+    String email,
+  ) async {
+    await userdata.doc(email).update(
+      {
+        'countgdp': FieldValue.increment(1),
+      },
+    );
+  }
+
+  static Future<void> updatestatusDiabetescountgds(
+    String email,
+  ) async {
+    await userdata.doc(email).update(
+      {
+        'countgds': FieldValue.increment(1),
+      },
+    );
+  }
+
+  static Future<void> updatestatusDiabetescountttgo(
+    String email,
+  ) async {
+    await userdata.doc(email).update(
+      {
+        'countttgo': FieldValue.increment(1),
+      },
+    );
+  }
+
+  static Future<void> updatestatusDiabetesname(
+    String email,
+    String value,
+  ) async {
+    await userdata.doc(email).update(
+      {
+        'statusDiabetes': value,
+      },
+    );
+  }
 }

@@ -12,8 +12,9 @@ import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import 'package:path/path.dart';
+import '../../api/ColorsApi.dart';
 import '../../api/DatabaseServices.dart';
-import '../HalamanRumah/HalamanRumah.dart';
+import '../home/anamnesis.dart';
 
 class IsiData extends StatefulWidget {
   const IsiData({Key? key}) : super(key: key);
@@ -26,7 +27,6 @@ class _IsiDataState extends State<IsiData> {
   int currentstep = 0;
 
   TextEditingController nama = TextEditingController();
-  TextEditingController username = TextEditingController();
   TextEditingController noHP = TextEditingController();
 
   String puskesmas = "pilih";
@@ -80,14 +80,6 @@ class _IsiDataState extends State<IsiData> {
           Step(
               state: currentstep > 1 ? StepState.complete : StepState.indexed,
               isActive: currentstep >= 1,
-              title: const Text('Username'),
-              content: TextFormField(
-                controller: username,
-              ),
-              subtitle: const Text('ini akan ditampilkan di aplikasi')),
-          Step(
-              state: currentstep > 2 ? StepState.complete : StepState.indexed,
-              isActive: currentstep >= 2,
               title: const Text('Jenis Kelamin'),
               content: GenderPickerWithImage(
                 showOtherGender: false,
@@ -122,8 +114,8 @@ class _IsiDataState extends State<IsiData> {
               ),
               subtitle: const Text('jenis kelaminmu')),
           Step(
-            state: currentstep > 3 ? StepState.complete : StepState.indexed,
-            isActive: currentstep >= 3,
+            state: currentstep > 2 ? StepState.complete : StepState.indexed,
+            isActive: currentstep >= 2,
             title: const Text('Upload Foto'),
             content: Column(
               children: <Widget>[
@@ -188,8 +180,8 @@ class _IsiDataState extends State<IsiData> {
             ),
           ),
           Step(
-              state: currentstep > 4 ? StepState.complete : StepState.indexed,
-              isActive: currentstep >= 4,
+              state: currentstep > 3 ? StepState.complete : StepState.indexed,
+              isActive: currentstep >= 3,
               title: const Text('Tanggal Lahir'),
               content: DateTimePicker(
                 type: DateTimePickerType.date,
@@ -216,8 +208,8 @@ class _IsiDataState extends State<IsiData> {
                 onSaved: (val) => print(val),
               )),
           Step(
-            state: currentstep > 5 ? StepState.complete : StepState.indexed,
-            isActive: currentstep >= 5,
+            state: currentstep > 4 ? StepState.complete : StepState.indexed,
+            isActive: currentstep >= 4,
             title: const Text('Nomor HP'),
             content: TextFormField(
               controller: noHP,
@@ -225,9 +217,9 @@ class _IsiDataState extends State<IsiData> {
             ),
           ),
           Step(
-              state: currentstep > 6 ? StepState.complete : StepState.indexed,
-              isActive: currentstep >= 6,
-              title: const Text('Alamat'),
+              state: currentstep > 5 ? StepState.complete : StepState.indexed,
+              isActive: currentstep >= 5,
+              title: const Text('Pilih daerah puskesmasmu'),
               content:
               DropdownButton(
                   value: puskesmas,
@@ -267,12 +259,12 @@ class _IsiDataState extends State<IsiData> {
         title: const Text('Isi Data'),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.teal.shade900,
+        backgroundColor: IsiQueColors.isiqueblue.shade400,
       ),
       body: Theme(
         data: ThemeData(
             colorScheme: ColorScheme.fromSwatch()
-                .copyWith(primary: Colors.teal.shade900)),
+                .copyWith(primary: IsiQueColors.isiqueblue.shade400,)),
         child: Stepper(
             type: StepperType.vertical,
             currentStep: currentstep,
@@ -304,54 +296,7 @@ class _IsiDataState extends State<IsiData> {
                 margin: const EdgeInsets.only(top: 50),
                 child: Row(
                   children: [
-                    (isLastStep == true)
-                        ? Expanded(
-                            child: ElevatedButton(
-                              onPressed: () {
-                                genderr ??= 'Laki-laki';
-                                print(genderr);
-                                DatabaseServices.updateakun(
-                                  email,
-                                  nama.text,
-                                  username.text,
-                                  genderr!,
-                                  tanggal,
-                                  bulan,
-                                  tahun,
-                                  puskesmas,
-                                  noHP.text,
-                                  imageUrl,
-                                );
-                                for (int i = 1; i <= 3; i++) {
-                                  DatabaseServices.setFAQ(email!, i);
-                                }
 
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          const HalamanRumah()),
-                                );
-                              },
-                              child: const Text('Konfirmasi'),
-                            ),
-                          )
-                        : (cekstep[currentstep] == false)
-                            ? Expanded(
-                                child: ElevatedButton(
-                                  onPressed: details.onStepContinue,
-                                  child: const Text('lanjut'),
-                                ),
-                              )
-                            : Expanded(
-                                child: ElevatedButton(
-                                  onPressed: () {},
-                                  child: const Text('kalakang'),
-                                ),
-                              ),
-                    const SizedBox(
-                      width: 20,
-                    ),
                     if (currentstep != 0)
                       Expanded(
                         child: ElevatedButton(
@@ -359,6 +304,52 @@ class _IsiDataState extends State<IsiData> {
                           child: const Text('balik'),
                         ),
                       ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    (isLastStep == true)
+                        ? Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          DatabaseServices.updateakun(
+                            email,
+                            nama.text,
+                            genderr!,
+                            tanggal,
+                            bulan,
+                            tahun,
+                            puskesmas,
+                            noHP.text,
+                            imageUrl,
+                          );
+                          for (int i = 1; i <= 3; i++) {
+                            DatabaseServices.setFAQ(email!, i);
+                          }
+
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                const Anamnesis()),
+                          );
+                        },
+                        child: const Text('Konfirmasi'),
+                      ),
+                    )
+                        : (cekstep[currentstep] == false)
+                        ? Expanded(
+                      child: ElevatedButton(
+                        onPressed: details.onStepContinue,
+                        child: const Text('lanjut'),
+                      ),
+                    )
+                        : Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {},
+                        child: const Text('kalakang'),
+                      ),
+                    ),
+
                   ],
                 ),
               );

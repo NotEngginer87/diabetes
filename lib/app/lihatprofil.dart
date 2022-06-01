@@ -32,7 +32,7 @@ class _LihatProfilState extends State<LihatProfil> {
         centerTitle: true,
       ),
       body: Container(
-          color: Colors.teal.shade900,
+          color: IsiQueColors.isiqueblue.shade400,
           child: Container(
             decoration: BoxDecoration(
               color: Colors.white,

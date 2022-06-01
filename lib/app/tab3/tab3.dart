@@ -22,7 +22,7 @@ class _Tab3State extends State<Tab3> {
 
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
-    final emaila = user!.email;
+    final useremail = user!.email;
 
     return Padding(
         padding: EdgeInsets.only(top: 8, bottom: 8, left: 12, right: 12),
@@ -81,7 +81,7 @@ class _Tab3State extends State<Tab3> {
                             fontWeight: FontWeight.w500, fontSize: 20),
                       ),
                       Text(
-                        emaila.toString(),
+                        useremail.toString(),
                         style: GoogleFonts.pathwayGothicOne(
                             fontWeight: FontWeight.w500, fontSize: 20),
                       ),
@@ -89,7 +89,7 @@ class _Tab3State extends State<Tab3> {
                   ),
                 ),
                 StreamBuilder<DocumentSnapshot>(
-                  stream: userdata.doc(emaila.toString()).snapshots(),
+                  stream: userdata.doc(useremail.toString()).snapshots(),
                   builder: (context, AsyncSnapshot snapshot) {
                     if (snapshot.hasData) {
                       Map<String, dynamic> data =

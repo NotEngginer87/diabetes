@@ -8,6 +8,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'api/ColorsApi.dart';
 import 'app/HalamanRumah/HalamanRumah.dart';
 import 'onboard2.0/introduction_animation_screen.dart';
 
@@ -73,7 +74,7 @@ class ControllerAuth extends StatelessWidget {
                       return Scaffold(
                         appBar: AppBar(
                           title: const Text('update aplikasi'),
-                          backgroundColor: Colors.teal.shade900,
+                          backgroundColor: IsiQueColors.isiqueblue.shade400,
                           elevation: 0,
                           centerTitle: true,
                         ),
@@ -101,7 +102,7 @@ class ControllerAuth extends StatelessWidget {
                 return Scaffold(
                   appBar: AppBar(
                     title: const Text('update aplikasi'),
-                    backgroundColor: Colors.teal.shade900,
+                    backgroundColor: IsiQueColors.isiqueblue.shade400,
                     elevation: 0,
                     centerTitle: true,
                   ),

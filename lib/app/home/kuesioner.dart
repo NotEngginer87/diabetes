@@ -1,4 +1,4 @@
-// ignore_for_file: non_constant_identifier_names, avoid_types_as_parameter_names, avoid_print
+// ignore_for_file: non_constant_identifier_names, avoid_types_as_parameter_names, avoid_print, library_private_types_in_public_api
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:gender_picker/source/enums.dart';
 import 'package:gender_picker/source/gender_picker.dart';
 
+import '../../api/ColorsApi.dart';
 import '../../api/DatabaseServices.dart';
 import '../HalamanRumah/HalamanRumah.dart';
 import '../Utils/style.dart';
@@ -48,21 +49,27 @@ class _DataRespondenState extends State<DataResponden> {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference kuesioner = firestore.collection('kuesioner');
 
+
+    final FirebaseAuth auth = FirebaseAuth.instance;
+    final User? user = auth.currentUser;
+    final useremail = user!.email;
+
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Kuesioner'),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.teal.shade900,
+        backgroundColor: IsiQueColors.isiqueblue.shade400,
       ),
       body: Theme(
         data: ThemeData(
             colorScheme: ColorScheme.fromSwatch()
-                .copyWith(primary: Colors.teal.shade900)),
+                .copyWith(primary: IsiQueColors.isiqueblue.shade400,)),
         child: Container(
             color: Colors.grey.shade50,
             child: Container(
-                color: Colors.teal.shade900,
+                color: IsiQueColors.isiqueblue.shade400,
                 child: Container(
                     decoration: const BoxDecoration(
                       color: Colors.white,
@@ -190,7 +197,7 @@ class _DataRespondenState extends State<DataResponden> {
                                                             as Map<String,
                                                                 dynamic>;
 
-                                                    int orangke = data['orang'];
+                                                    int dsmqcek = data['damqcek'];
 
                                                     return ElevatedButton(
                                                       style:
@@ -204,14 +211,14 @@ class _DataRespondenState extends State<DataResponden> {
                                                                     (BuildContext
                                                                         context) {
                                                           return Kuesioner(
-                                                              orangke);
+                                                              dsmqcek);
                                                         }));
                                                         DatabaseServices
-                                                            .updatekuesioner(
-                                                          orangke,
+                                                            .updatekuesioner(useremail!,
+                                                          dsmqcek,
                                                         );
                                                         DatabaseServices
-                                                            .updatejmlorangkuesioner();
+                                                            .updatejmlorangkuesioner(useremail);
                                                       },
                                                     );
                                                   }
@@ -244,6 +251,7 @@ class _KuesionerState extends State<Kuesioner> {
   @override
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
+    CollectionReference userdata = firestore.collection('user');
     CollectionReference kuesioner = firestore.collection('kuesioner');
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
@@ -253,16 +261,16 @@ class _KuesionerState extends State<Kuesioner> {
         title: const Text('Riwayat Konsultasi'),
         centerTitle: true,
         elevation: 0,
-        backgroundColor: Colors.teal.shade900,
+        backgroundColor: IsiQueColors.isiqueblue.shade400,
       ),
       body: Theme(
         data: ThemeData(
             colorScheme: ColorScheme.fromSwatch()
-                .copyWith(primary: Colors.teal.shade900)),
+                .copyWith(primary: IsiQueColors.isiqueblue.shade400,)),
         child: Container(
             color: Colors.grey.shade50,
             child: Container(
-                color: Colors.teal.shade900,
+                color: IsiQueColors.isiqueblue.shade400,
                 child: Container(
                     decoration: const BoxDecoration(
                       color: Colors.white,
@@ -282,6 +290,7 @@ class _KuesionerState extends State<Kuesioner> {
                               return Column(
                                   children: snapshot.data.docs
                                       .map<Widget>((e) => QuestionCard(
+                                    useremail!,
                                             widget.orangke,
                                             e.data()['id'],
                                             e.data()['pertanyaan'],
@@ -306,9 +315,9 @@ class _KuesionerState extends State<Kuesioner> {
                           height: 12,
                         ),
                         StreamBuilder<DocumentSnapshot>(
-                          stream: kuesioner
-                              .doc('kuesionerEUCS')
-                              .collection('orang')
+                          stream: userdata
+                              .doc(useremail)
+                              .collection('DSMQ')
                               .doc((widget.orangke - 1).toString())
                               .snapshots(),
                           builder: (context, AsyncSnapshot snapshot) {
@@ -327,19 +336,37 @@ class _KuesionerState extends State<Kuesioner> {
                                   style: untukKonsultasiButton,
                                   child: const Text('submit'),
                                   onPressed: () {
-                                    Navigator.push(context, MaterialPageRoute(
-                                        builder: (BuildContext context) {
-                                      return const HalamanRumah();
-                                    }));
                                     if (skor <= 16) {
-                                      DatabaseServices.updatestatusDSMQ(
-                                          useremail!, 'Buruk');
+                                      {
+                                        DatabaseServices.updatestatusDSMQ(
+                                            useremail!, 'Buruk',DateTime.now().day,DateTime.now().month,DateTime.now().year);
+
+                                        Navigator.push(context, MaterialPageRoute(
+                                            builder: (BuildContext context) {
+                                              return const HalamanRumah();
+                                            }));
+                                      }
                                     } else if ((skor > 16) && (skor < 32)) {
-                                      DatabaseServices.updatestatusDSMQ(
-                                          useremail!, 'Sedang');
+                                      {
+                                        DatabaseServices.updatestatusDSMQ(
+                                            useremail!, 'Sedang',DateTime.now().day,DateTime.now().month,DateTime.now().year);
+
+                                        Navigator.push(context, MaterialPageRoute(
+                                            builder: (BuildContext context) {
+                                              return const HalamanRumah();
+                                            }));
+                                      }
                                     } else if (skor >= 32) {
-                                      DatabaseServices.updatestatusDSMQ(
-                                          useremail!, 'Baik');
+                                      {
+                                        DatabaseServices.updatestatusDSMQ(
+                                            useremail!, 'Baik',DateTime.now().day,DateTime.now().month,DateTime.now().year);
+
+                                        Navigator.push(context, MaterialPageRoute(
+                                            builder: (BuildContext context) {
+                                              return const HalamanRumah();
+                                            }));
+                                      }
+
                                     }
                                   },
                                 ),
@@ -361,12 +388,13 @@ class _KuesionerState extends State<Kuesioner> {
 }
 
 class QuestionCard extends StatefulWidget {
-  const QuestionCard(this.orangke, this.idpertanyaan, this.pertanyaan,
+  const QuestionCard(this.useremail,this.orangke, this.idpertanyaan, this.pertanyaan,
       {Key? key})
       : super(key: key);
 
   final int orangke;
 
+  final String useremail;
   final String idpertanyaan;
   final String pertanyaan;
 
@@ -382,7 +410,7 @@ class _QuestionCardState extends State<QuestionCard> {
     return Theme(
       data: ThemeData(
           colorScheme:
-              ColorScheme.fromSwatch().copyWith(primary: Colors.teal.shade900)),
+              ColorScheme.fromSwatch().copyWith(primary: IsiQueColors.isiqueblue.shade400,)),
       child: Card(
         elevation: 4,
         clipBehavior: Clip.antiAlias,
@@ -428,16 +456,17 @@ class _QuestionCardState extends State<QuestionCard> {
                       Column(
                         children: [
                           Radio(
-                            activeColor: Colors.teal.shade900,
+                            activeColor: IsiQueColors.isiqueblue.shade400,
                             value: 0,
                             groupValue: id,
                             onChanged: (val) {
                               setState(() {
-                                DatabaseServices.updateminskorkuesioner(
+                                DatabaseServices.updateminskorkuesioner(widget.useremail,
                                     widget.orangke, id);
                                 id = 0;
 
-                                DatabaseServices.updateskorkuesioner(
+                                DatabaseServices.updateskorkuesioner(widget.useremail,
+
                                     widget.orangke, id);
                               });
                             },
@@ -448,16 +477,16 @@ class _QuestionCardState extends State<QuestionCard> {
                       Column(
                         children: [
                           Radio(
-                            activeColor: Colors.teal.shade900,
+                            activeColor: IsiQueColors.isiqueblue.shade400,
                             value: 1,
                             groupValue: id,
                             onChanged: (val) {
                               setState(() {
-                                DatabaseServices.updateminskorkuesioner(
+                                DatabaseServices.updateminskorkuesioner(widget.useremail,
                                     widget.orangke, id);
                                 id = 1;
 
-                                DatabaseServices.updateskorkuesioner(
+                                DatabaseServices.updateskorkuesioner(widget.useremail,
                                     widget.orangke, id);
                               });
                             },
@@ -468,16 +497,16 @@ class _QuestionCardState extends State<QuestionCard> {
                       Column(
                         children: [
                           Radio(
-                            activeColor: Colors.teal.shade900,
+                            activeColor: IsiQueColors.isiqueblue.shade400,
                             value: 2,
                             groupValue: id,
                             onChanged: (val) {
                               setState(() {
-                                DatabaseServices.updateminskorkuesioner(
+                                DatabaseServices.updateminskorkuesioner(widget.useremail,
                                     widget.orangke, id);
                                 id = 2;
 
-                                DatabaseServices.updateskorkuesioner(
+                                DatabaseServices.updateskorkuesioner(widget.useremail,
                                     widget.orangke, id);
                               });
                             },
@@ -488,15 +517,15 @@ class _QuestionCardState extends State<QuestionCard> {
                       Column(
                         children: [
                           Radio(
-                            activeColor: Colors.teal.shade900,
+                            activeColor: IsiQueColors.isiqueblue.shade400,
                             value: 3,
                             groupValue: id,
                             onChanged: (val) {
                               setState(() {
-                                DatabaseServices.updateminskorkuesioner(
+                                DatabaseServices.updateminskorkuesioner(widget.useremail,
                                     widget.orangke, id);
                                 id = 3;
-                                DatabaseServices.updateskorkuesioner(
+                                DatabaseServices.updateskorkuesioner(widget.useremail,
                                     widget.orangke, id);
                               });
                             },

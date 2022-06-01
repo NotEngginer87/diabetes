@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:slide_to_act/slide_to_act.dart';
 
 import '../../api/AuthServices.dart';
+import '../../api/ColorsApi.dart';
 import 'isidata.dart';
 
 class RegisEmailScreen extends StatefulWidget {
@@ -24,10 +25,10 @@ class _RegisEmailScreenState extends State<RegisEmailScreen> {
           title: const Text('Login'),
           centerTitle: true,
           elevation: 0,
-          backgroundColor: Colors.teal.shade900,
+          backgroundColor: IsiQueColors.isiqueblue.shade400,
         ),
         body: Container(
-            color: Colors.teal.shade900,
+            color: IsiQueColors.isiqueblue.shade400,
             child: Container(
               decoration: const BoxDecoration(
                 color: Colors.white,
@@ -68,7 +69,7 @@ class _RegisEmailScreenState extends State<RegisEmailScreen> {
                                       const EdgeInsets.all(12.0),
                                       child: SlideAction(
                                         outerColor:
-                                        Colors.teal.shade900,
+                                        IsiQueColors.isiqueblue.shade400,
                                         innerColor: Colors.white,
                                         key: key,
                                         text: 'Lanjut ke Aplikasi',
@@ -95,7 +96,7 @@ class _RegisEmailScreenState extends State<RegisEmailScreen> {
                                   child: SizedBox(
                                     width: MediaQuery.of(context).size.width - 48,
                                     child: Card(
-                                      color: Colors.teal.shade900,
+                                      color: IsiQueColors.isiqueblue.shade400,
                                       clipBehavior: Clip.antiAlias,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8),
