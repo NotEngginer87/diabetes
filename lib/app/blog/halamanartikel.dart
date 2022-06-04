@@ -21,96 +21,100 @@ class _HalamanArtikelState extends State<HalamanArtikel> {
 
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference blog = firestore.collection('blog');
-    return Column(
-        children: [
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+          children: [
 
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text('Artikel terpopuler : ',
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20,
-                )),
-          ),
-          const SizedBox(
-            height: 8,
-          ),
-          StreamBuilder<QuerySnapshot>(
-            stream: blog
-                .orderBy('terbaca', descending: true)
-                .limit(5)
-                .snapshots(),
-            builder: (_, AsyncSnapshot snapshot) {
-              if (snapshot.hasData) {
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                      children: snapshot.data.docs
-                          .map<Widget>((e) => BlogPopulerCard(
-                        e.data()['id'],
-                        e.data()['urlgambar1'],
-                        e.data()['bab'],
-                        e.data()['posting'],
-                      ))
-                          .toList()),
-                );
-              } else {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Center(
-                      child: Center(
-                        child: CircularProgressIndicator(),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Artikel terpopuler : ',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                  )),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            StreamBuilder<QuerySnapshot>(
+              stream: blog
+                  .orderBy('terbaca', descending: true)
+                  .limit(5)
+                  .snapshots(),
+              builder: (_, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                        children: snapshot.data.docs
+                            .map<Widget>((e) => BlogPopulerCard(
+                          e.data()['id'],
+                          e.data()['urlgambar1'],
+                          e.data()['bab'],
+                          e.data()['posting'],
+                          e.data()['penulis'],
+                        ))
+                            .toList()),
+                  );
+                } else {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      Center(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
                       ),
-                    ),
-                  ],
-                );
-              }
-            },
-          ),
+                    ],
+                  );
+                }
+              },
+            ),
 
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Text('Artikel terbaru : ',
-                style: GoogleFonts.poppins(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 20,
-                )),
-          ),
-          StreamBuilder(
-            stream: blog.snapshots(),
-            builder: (_, AsyncSnapshot snapshot) {
-              if (snapshot.hasData) {
-                return Column(
-                  children: snapshot.data.docs
-                      .map<Widget>((e) => BlogCard(
-                    e.data()['id'],
-                    e.data()['bab'],
-                    e.data()['judul'],
-                    e.data()['penulis'],
-                    e.data()['urlgambar1'],
-                    e.data()['terbaca'],
-                    e.data()['posting'],
-                  ))
-                      .toList(),
-                );
-              } else {
-                return Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: const [
-                    Center(
-                      child: Center(
-                        child: CircularProgressIndicator(),
+            Align(
+              alignment: Alignment.centerLeft,
+              child: Text('Artikel terbaru : ',
+                  style: GoogleFonts.poppins(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 20,
+                  )),
+            ),
+            StreamBuilder(
+              stream: blog.snapshots(),
+              builder: (_, AsyncSnapshot snapshot) {
+                if (snapshot.hasData) {
+                  return Column(
+                    children: snapshot.data.docs
+                        .map<Widget>((e) => BlogCard(
+                      e.data()['id'],
+                      e.data()['bab'],
+                      e.data()['judul'],
+                      e.data()['penulis'],
+                      e.data()['urlgambar1'],
+                      e.data()['terbaca'],
+                      e.data()['posting'],
+                    ))
+                        .toList(),
+                  );
+                } else {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: const [
+                      Center(
+                        child: Center(
+                          child: CircularProgressIndicator(),
+                        ),
                       ),
-                    ),
-                  ],
-                );
-              }
-            },
-          ),
-        ]
+                    ],
+                  );
+                }
+              },
+            ),
+          ]
+      ),
     );
   }
 }
@@ -120,13 +124,15 @@ class BlogPopulerCard extends StatelessWidget {
   final String? bab;
   final String? id;
   final bool posting;
+  final String penulis;
 
   // ignore: prefer_const_constructors_in_immutables
   BlogPopulerCard(
       this.id,
       this.urlgambar1,
       this.bab,
-      this.posting, {
+      this.posting,
+      this.penulis,{
         Key? key,
       }) : super(key: key);
 
@@ -210,8 +216,8 @@ class BlogCard extends StatelessWidget {
           (posting == true)
               ? Padding(
             padding: const EdgeInsets.only(
-              left: 8,
-              right: 8,
+              left: 6,
+              right: 6,
               top: 12,
               bottom: 12,
             ),
@@ -256,6 +262,16 @@ class BlogCard extends StatelessWidget {
                     judul!,
                     style: GoogleFonts.poppins(
                         fontWeight: FontWeight.w500, fontSize: 16),
+                  ),
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.6,
+                  child: Text(
+                    'penulis : $penulis',
+                    style: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 12,
+                        color: Colors.grey),
                   ),
                 ),
                 SizedBox(

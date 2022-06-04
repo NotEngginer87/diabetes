@@ -96,10 +96,20 @@ class _InfoAkunDiabetesState extends State<InfoAkunDiabetes> {
                                                     style: GoogleFonts.pathwayGothicOne(
                                                         fontWeight: FontWeight.w500, fontSize: 20),
                                                   ),
-                                                  Text(
-                                                    gdp.toString(),
-                                                    style: GoogleFonts.pathwayGothicOne(
-                                                        fontWeight: FontWeight.w500, fontSize: 20),
+                                                  Row(
+                                                    children: [
+
+                                                      Text(
+                                                        gdp.toString(),
+                                                        style: GoogleFonts.pathwayGothicOne(
+                                                            fontWeight: FontWeight.w500, fontSize: 20),
+                                                      ),
+                                                      Text(
+                                                        ' mg/dL',
+                                                        style: GoogleFonts.pathwayGothicOne(
+                                                            fontWeight: FontWeight.w500, fontSize: 20),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
@@ -114,10 +124,20 @@ class _InfoAkunDiabetesState extends State<InfoAkunDiabetes> {
                                                     style: GoogleFonts.pathwayGothicOne(
                                                         fontWeight: FontWeight.w500, fontSize: 20),
                                                   ),
-                                                  Text(
-                                                    gds.toString(),
-                                                    style: GoogleFonts.pathwayGothicOne(
-                                                        fontWeight: FontWeight.w500, fontSize: 20),
+                                                  Row(
+                                                    children: [
+
+                                                      Text(
+                                                        gds.toString(),
+                                                        style: GoogleFonts.pathwayGothicOne(
+                                                            fontWeight: FontWeight.w500, fontSize: 20),
+                                                      ),
+                                                      Text(
+                                                        ' mg/dL',
+                                                        style: GoogleFonts.pathwayGothicOne(
+                                                            fontWeight: FontWeight.w500, fontSize: 20),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
@@ -132,10 +152,22 @@ class _InfoAkunDiabetesState extends State<InfoAkunDiabetes> {
                                                     style: GoogleFonts.pathwayGothicOne(
                                                         fontWeight: FontWeight.w500, fontSize: 20),
                                                   ),
-                                                  Text(
-                                                    ttgo.toString(),
-                                                    style: GoogleFonts.pathwayGothicOne(
-                                                        fontWeight: FontWeight.w500, fontSize: 20),
+
+                                                  Row(
+                                                    children: [
+
+                                                      Text(
+                                                        ttgo.toString(),
+                                                        style: GoogleFonts.pathwayGothicOne(
+                                                            fontWeight: FontWeight.w500, fontSize: 20),
+                                                      ),
+
+                                                      Text(
+                                                        ' mg/dL',
+                                                        style: GoogleFonts.pathwayGothicOne(
+                                                            fontWeight: FontWeight.w500, fontSize: 20),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
@@ -147,7 +179,7 @@ class _InfoAkunDiabetesState extends State<InfoAkunDiabetes> {
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   Text(
-                                                    'Poliuri: ',
+                                                    'Sering Berkemih : ',
                                                     style: GoogleFonts.pathwayGothicOne(
                                                         fontWeight: FontWeight.w500, fontSize: 20),
                                                   ),
@@ -165,7 +197,7 @@ class _InfoAkunDiabetesState extends State<InfoAkunDiabetes> {
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   Text(
-                                                    'Polidipsi: ',
+                                                    'Rasa haus terus menerus : ',
                                                     style: GoogleFonts.pathwayGothicOne(
                                                         fontWeight: FontWeight.w500, fontSize: 20),
                                                   ),
@@ -183,7 +215,7 @@ class _InfoAkunDiabetesState extends State<InfoAkunDiabetes> {
                                                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                                 children: [
                                                   Text(
-                                                    'Polifagi: ',
+                                                    'Makan berlebihan : ',
                                                     style: GoogleFonts.pathwayGothicOne(
                                                         fontWeight: FontWeight.w500, fontSize: 20),
                                                   ),

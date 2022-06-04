@@ -11,6 +11,7 @@ import 'package:line_icons/line_icons.dart';
 
 import '../../Algorithm/countdate.dart';
 import '../blog/BlogDepan.dart';
+import '../home/Edukasi DSMQ.dart';
 import '../home/dsmqcard.dart';
 import '../home/infopasien.dart';
 import '../home/statusdiabetescard.dart';
@@ -33,6 +34,7 @@ class _HalamanRumahState extends State<HalamanRumah> {
   Widget build(BuildContext context) {
     FirebaseFirestore firestore = FirebaseFirestore.instance;
     CollectionReference userdata = firestore.collection('user');
+    CollectionReference eddsmq = firestore.collection('EdukasiDSMQ');
 
     final FirebaseAuth auth = FirebaseAuth.instance;
     final User? user = auth.currentUser;
@@ -51,7 +53,7 @@ class _HalamanRumahState extends State<HalamanRumah> {
       backgroundColor: Colors.white,
       extendBody: true,
       appBar: AppBar(
-        title: const Text('DIABETO'),
+        title: const Text('DIA.BETO'),
         centerTitle: true,
         titleTextStyle: GoogleFonts.pathwayGothicOne(
             fontWeight: FontWeight.w500, fontSize: 24, color: Colors.white),
@@ -129,7 +131,7 @@ class _HalamanRumahState extends State<HalamanRumah> {
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width,
                           height: MediaQuery.of(context).size.height,
-                          child: Column(
+                          child: ListView(
                             children: [
                               const infopasien(),
                               const SDCard(),
@@ -162,6 +164,147 @@ class _HalamanRumahState extends State<HalamanRumah> {
                                   );
                                 },
                               ),
+                              StreamBuilder<DocumentSnapshot>(
+                                stream: userdata.doc(useremail).snapshots(),
+                                builder: (context, AsyncSnapshot snapshot) {
+                                  if (snapshot.hasData) {
+                                    Map<String, dynamic> data = snapshot.data!
+                                        .data() as Map<String, dynamic>;
+
+                                    String statusDSMQ = data['statusDSMQ'];
+
+                                    return (statusDSMQ != '') ? Card(
+                                        clipBehavior: Clip.antiAlias,
+                                        color: IsiQueColors.isiqueblue.shade400,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                        ),
+                                        elevation: 2,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 8),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                            children: [
+                                              const Padding(
+                                                padding: EdgeInsets.only(
+                                                    left: 12, top: 12),
+                                                child: Text(
+                                                  'Edukasi DSMQ',
+                                                  style: TextStyle(
+                                                      fontSize: 18,
+                                                      color: Colors.white),
+                                                  textAlign: TextAlign.left,
+                                                ),
+                                              ),
+                                              StreamBuilder<DocumentSnapshot>(
+                                                stream: userdata
+                                                    .doc(useremail.toString())
+                                                    .snapshots(),
+                                                builder: (context,
+                                                    AsyncSnapshot snapshot) {
+                                                  if (snapshot.hasData) {
+                                                    Map<String, dynamic> data =
+                                                    snapshot.data!.data()
+                                                    as Map<String, dynamic>;
+
+                                                    String statusDSMQ =
+                                                    data['statusDSMQ'];
+
+                                                    return Padding(
+                                                      padding: const EdgeInsets.only(
+                                                          top: 2,
+                                                          left: 12,
+                                                          right: 20,
+                                                          bottom: 10),
+                                                      child: Row(
+                                                        children: [
+                                                          Text(
+                                                            'Status DSMQ : ',
+                                                            style: GoogleFonts
+                                                                .pathwayGothicOne(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .w200,
+                                                                fontSize: 20,
+                                                                color:
+                                                                Colors.white),
+                                                          ),
+                                                          Text(
+                                                            statusDSMQ,
+                                                            style: GoogleFonts
+                                                                .pathwayGothicOne(
+                                                                fontWeight:
+                                                                FontWeight
+                                                                    .w200,
+                                                                fontSize: 20,
+                                                                color: (statusDSMQ ==
+                                                                    'Baik')
+                                                                    ? Colors.green
+                                                                    .shade600
+                                                                    : (statusDSMQ ==
+                                                                    'Sedang')
+                                                                    ? Colors
+                                                                    .yellow
+                                                                    : (statusDSMQ ==
+                                                                    'Buruk')
+                                                                    ? Colors
+                                                                    .red
+                                                                    : Colors
+                                                                    .red),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    );
+                                                  }
+                                                  return const Center(
+                                                    child:
+                                                    CircularProgressIndicator(),
+                                                  );
+                                                },
+                                              ),
+                                              StreamBuilder<QuerySnapshot>(
+                                                stream: eddsmq.snapshots(),
+                                                builder: (_, AsyncSnapshot snapshot) {
+                                                  if (snapshot.hasData) {
+                                                    return Column(
+                                                        children: snapshot.data.docs
+                                                            .map<Widget>((e) =>
+                                                            EdukasiDSMQcard(
+                                                              e.data()['id'],
+                                                              e.data()['jd'],
+                                                              e.data()['ed'],
+                                                            ))
+                                                            .toList());
+                                                  } else {
+                                                    return Column(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                      crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                      children: const [
+                                                        Center(
+                                                          child: Center(
+                                                            child:
+                                                            CircularProgressIndicator(),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    );
+                                                  }
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        )) : Container();
+                                  }
+                                  return const Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                },
+                              ),
+
                             ],
                           ),
                         ),
@@ -256,7 +399,7 @@ class _HalamanRumahState extends State<HalamanRumah> {
                                                       });
                                                 },
                                                 child: const Text(
-                                                    'kontak Diabeto')),
+                                                    'kontak DIA.BETO')),
                                           ),
                                           const SizedBox(
                                             height: 12,

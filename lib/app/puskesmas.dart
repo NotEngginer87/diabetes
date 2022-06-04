@@ -39,123 +39,135 @@ class _puskesmasState extends State<puskesmas> {
 
           return SizedBox(
             height: MediaQuery.of(context).size.height - 150,
-            width:  MediaQuery.of(context).size.width,
+            width: MediaQuery.of(context).size.width,
             child: ListView(
+              children: [
+                StreamBuilder<DocumentSnapshot>(
+                  stream: puskesmas.doc(alamat.toString()).snapshots(),
+                  builder: (context, AsyncSnapshot snapshot) {
+                    if (snapshot.hasData) {
+                      Map<String, dynamic> data =
+                          snapshot.data!.data() as Map<String, dynamic>;
 
-              children: [StreamBuilder<DocumentSnapshot>(
-                stream: puskesmas.doc(alamat.toString()).snapshots(),
-                builder: (context, AsyncSnapshot snapshot) {
-                  if (snapshot.hasData) {
-                    Map<String, dynamic> data =
-                    snapshot.data!.data() as Map<String, dynamic>;
+                      String cp = data['cp'];
+                      String image = data['image'];
+                      String lokasi = data['lokasi'];
+                      String nama = data['nama'];
+                      String prolanis = data['prolanis'];
 
-                    String cp = data['cp'];
-                    String image = data['image'];
-                    String lokasi = data['lokasi'];
-                    String nama = data['nama'];
-                    String prolanis = data['prolanis'];
-
-                    return Padding(
-                      padding: const EdgeInsets.only(
-                          top: 10, left: 20, right: 20, bottom: 10),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Card(
-                            elevation: 4,
-                            clipBehavior: Clip.antiAlias,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(25),
+                      return Padding(
+                        padding: const EdgeInsets.only(
+                            top: 10, left: 20, right: 20, bottom: 10),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Card(
+                              elevation: 4,
+                              clipBehavior: Clip.antiAlias,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(25),
+                              ),
+                              child: Image(
+                                image: NetworkImage(image),
+                                height: MediaQuery.of(context).size.width,
+                                width: MediaQuery.of(context).size.width,
+                                fit: BoxFit.cover,
+                              ),
                             ),
-                            child: Image(
-                              image: NetworkImage(image),
-                              height: MediaQuery.of(context).size.width,
-                              width: MediaQuery.of(context).size.width,
-                              fit: BoxFit.cover,
+                            const SizedBox(
+                              height: 12,
                             ),
-                          ),
-                          const SizedBox(
-                            height: 12,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 0, right: 8),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      nama,
-                                      style: GoogleFonts.pathwayGothicOne(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 24,
-                                        color: IsiQueColors.isiqueblue.shade400,
-                                      ),
-                                    ),
-                                    const SizedBox(
-                                      height: 4,
-                                    ),
-                                    Row(
-                                      children: [
-                                        const Icon(LineIcons.mapMarker),
-                                        const SizedBox(
-                                          width: 4,
+                            Padding(
+                              padding: const EdgeInsets.only(left: 0, right: 8),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        nama,
+                                        style: GoogleFonts.pathwayGothicOne(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 24,
+                                          color:
+                                              IsiQueColors.isiqueblue.shade400,
                                         ),
-                                        Text(
-                                          lokasi,
-                                          style: GoogleFonts.pathwayGothicOne(
+                                      ),
+                                      const SizedBox(
+                                        height: 4,
+                                      ),
+                                      Row(
+                                        children: [
+                                          const Icon(LineIcons.mapMarker),
+                                          const SizedBox(
+                                            width: 4,
+                                          ),
+                                          Text(
+                                            lokasi,
+                                            style: GoogleFonts.pathwayGothicOne(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 20,
-                                              color: IsiQueColors.isiqueblue.shade400,),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                                IconButton(
-                                    onPressed: () {
-
-                                      launchWhatsApp(cp,
-                                          'Halo Admin $nama saya ingin menanyakan sesuatu');
-                                    },
-                                    icon: Icon(
-                                      LineIcons.whatSApp,
-                                      size: 48,
-                                      color: Colors.green.shade800,
-                                    ))
-                              ],
+                                              color: IsiQueColors
+                                                  .isiqueblue.shade400,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
+                                  ),
+                                  IconButton(
+                                      onPressed: () {
+                                        launchWhatsApp(cp,
+                                            'Halo Admin $nama saya ingin menanyakan sesuatu');
+                                      },
+                                      icon: Icon(
+                                        LineIcons.whatSApp,
+                                        size: 48,
+                                        color: Colors.green.shade800,
+                                      ))
+                                ],
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 12,),
-                          const Divider(),
-
-                          Text(
-                            'prolanis',
-                            style: GoogleFonts.pathwayGothicOne(
+                            const SizedBox(
+                              height: 12,
+                            ),
+                            const Divider(),
+                            SizedBox(
+                              width: MediaQuery.of(context).size.width,
+                              child: Text(
+                                'Program Pengelolaan Penyakit Kronis',
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.pathwayGothicOne(
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 20,
+                                  color: IsiQueColors.isiqueblue.shade400,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              prolanis,
+                              style: GoogleFonts.pathwayGothicOne(
                                 fontWeight: FontWeight.w500,
                                 fontSize: 20,
-                                color: IsiQueColors.isiqueblue.shade400,),
-                          ),
-                          Text(
-                            prolanis,
-                            style: GoogleFonts.pathwayGothicOne(
-                                fontWeight: FontWeight.w500,
-                                fontSize: 20,
-                                color: IsiQueColors.isiqueblue.shade400,),
-                          ),
-                        ],
-                      ),
+                                color: IsiQueColors.isiqueblue.shade400,
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+                    return const Center(
+                      child: CircularProgressIndicator(),
                     );
-                  }
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
-                },
-              )],
+                  },
+                )
+              ],
             ),
           );
         }
@@ -165,7 +177,6 @@ class _puskesmasState extends State<puskesmas> {
       },
     );
   }
-
 
   launchWhatsApp(String telepon, String text) async {
     final link = WhatsAppUnilink(

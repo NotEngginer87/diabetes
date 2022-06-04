@@ -181,13 +181,25 @@ class _tampilanblogState extends State<tampilanblog> {
                     ),
                     SizedBox(
                       width: MediaQuery.of(context).size.width,
-                      child: Text(
-                        'sudah dibaca : $terbaca kali',
-                        style: GoogleFonts.poppins(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            color: Colors.grey),
-                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            'sudah dibaca : $terbaca kali',
+                            style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                color: Colors.grey),
+                          ),
+                          Text(
+                            'penulis : $penulis',
+                            style: GoogleFonts.poppins(
+                                fontWeight: FontWeight.w500,
+                                fontSize: 14,
+                                color: Colors.grey),
+                          ),
+                        ],
+                      )
                     ),
                   ],
                 ),
@@ -211,6 +223,7 @@ class _tampilanblogState extends State<tampilanblog> {
                                         children: [
                                           Text(
                                             text1,
+
                                             style: GoogleFonts.poppins(
                                                 fontWeight: FontWeight.w600,
                                                 fontSize: 16,
